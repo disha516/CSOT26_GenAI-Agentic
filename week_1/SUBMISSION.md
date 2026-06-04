@@ -1,23 +1,29 @@
 # Assignment Submission: Week 1 (LLM API Integration & Chatbot Memory)
 
-# Key Design Decisions & Learnings
+# 📑 Assignment Submission: Week 1 (LLM API Integration & Chatbot Memory)
 
->1. Model-Agnostic Setup via OpenRouter
+## 🧠 1. What I Learnt This Week (My Key Takeaways)
+Before starting this assignment, I assumed LLMs inherently maintain memory of a chat session. Building these scripts from scratch gave me a solid understanding of how things actually work under the hood:
+* **LLMs are Completely Stateless:** Every time we invoke the client completion endpoint, it is a blind query. The model does not remember past turns. To make it behave like a chatbot, we have to manually capture the history in a standard Python list (`messages`) and feed the entire alternating list of user and assistant dictionaries back to the API on every single turn.
+* **Inspecting the Full Response Object:** Instead of just grabbing the text, I learned to print and inspect the complete nested `ChatCompletion` structure. Tracking `response.usage` fields like `total_tokens`, `prompt_tokens`, and `completion_tokens` is vital to understanding how much load a single query creates.
+* **Strict Key Hygiene via .env:** I learned why we should never hardcode secret API keys directly inside our scripts. Using `load_dotenv()` to pull keys directly from the environment setup and tracking them safely with `.gitignore` keeps production keys secure from being leaked onto GitHub.
 
-**DECISION** : Integrated the OpenRouter API using the standard OpenAI Python SDK client, pointing the `base_url` to OpenRouter's endpoint.
-**WHY**: This fulfills the mentor instruction to keep the setup model-agnostic. By using `model="openrouter/free"`, the script dynamically routes requests to optimal free models without changing a single line of core orchestration code.
+---
 
+## 🛠️ 2. Implementation Decisions: How & Why
 
->2. Message Object Extraction Logic (`build1.py`)
+### A. Context Compaction via Conditional Summary Injections
+* **How:** In `build2.py`, I set up a simple conditional block `if last_usage['total_tokens'] > 1000:`. When the token counter crosses this threshold, the script sends the current `messages` list plus a manual string asking the model to compress the conversation into 2-3 sentences. It extracts `compaction_response.choices[0].message.content` and completely resets the `messages` list with that fresh summary string inside a new system role dictionary.
+* **Why:** If I had used a basic slice operations trick to drop old dictionary indices from the list, the model would suffer from immediate context loss. It would instantly forget initial structural variables like my name or my college parameters. Overwriting the list array with a compressed technical summary keeps the vital context alive inside a small token window.
 
-**DECISION** : Extracted response text using `response.choices[0].message.content`.
-**WHY** : The OpenAI structure returns a complex nested object containing metadata and alternate completion paths. Grabbing index `0` ensures we process the primary generated turn while dropping unnecessary engine payloads.
+### B. Temporary Threshold Dropping for Live Verification
+* **How:** During my active testing phase, I temporarily dropped the token check parameter condition in the `if` statement from **1000 tokens** down to **100 tokens** (or 200 tokens).
+* **Why:** Waiting to naturally hit 1000 tokens during normal manual terminal inputs takes a lot of time and loops. Lowering the number allowed me to verify that the summary generation branch triggers successfully and resets the state array smoothly within just 3-4 chat turns. I restored it to the default 1000-token check for the final repository version.
 
+### C. Handling Wildcard Endpoint Instability
+* **How:** I kept the generic `model="openrouter/free"` routing in my final `build2.py` code to keep the application model-agnostic, but I manually analyzed how the free tier handles multi-turn loops during my runtime trials.
+* **Why:** As documented in my runtime logs below, the generic free endpoint occasionally routes traffic to specialized engines or content-safety frameworks. While keeping the code dynamic, this observation helped me understand that in production environments, locking down a specific model name is crucial to prevent the conversation state from breaking unexpectedly due to sudden backend engine swapping..
 
->3. State Management & Rolling Memory (`build2.py`)
-
-**DECISION**: Maintained interaction history via a persistent Python `messages` list, injecting a clear initial role definition inside `{"role": "system"}` as the first element instead of initializing it within the generative model arguments.
-**WHY* : Modern chat models don't naturally store history. Resending the growing alternating list of `user` and `assistant` messages on every turn forces coherent conversational memory.
 
 ---
 
