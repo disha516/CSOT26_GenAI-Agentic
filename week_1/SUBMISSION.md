@@ -97,21 +97,20 @@ esponse Usage: CompletionUsage(completion_tokens=61, prompt_tokens=469, total_to
 Chat started. Type 'exit' to quit.
 
 >STEP 1: Baseline Context Anchor
-[YOU]: My name is Disha and I study Electrical Engineering at IIT Delhi. Keep your answers technical.
-[MODEL]: Got it, Disha. Technical responses for Electrical Engineering it is. What's your query?
+*[YOU]: My name is Disha and I study Electrical Engineering at IIT Delhi. Keep your answers technical.*
+*[MODEL]: Got it, Disha. Technical responses for Electrical Engineering it is. What's your query?*
  
 >STEP 2 : TO CHECK THE /tokens COMMAND
-[YOU]: /tokens
-Last Call Usage -> Total: 206, Prompt: 47, Completion: 159
+*[YOU]: /tokens*
+*Last Call Usage -> Total: 206, Prompt: 47, Completion: 159*
 
 >STEP 3 : TECHNICAL EVALUATION AND ROLLING BUFFER
-[YOU]: Briefly explain why an inductor behaves as a short circuit to DC and an open circuit to high-frequency AC.
+*[YOU]: Briefly explain why an inductor behaves as a short circuit to DC and an open circuit to high-frequency AC.*
 
-[COMPACTION] Token limit crossed! Summarizing older conversation...
- Compaction done!
+*[COMPACTION] Token limit crossed! Summarizing older conversation...*
+ *Compaction done!*
 
-[MODEL]: 
-An inductor's opposition to current is governed by its **inductive reactance**:  
+*[MODEL]: An inductor's opposition to current is governed by its **inductive reactance**:  
 $$X_L = 2\pi f L$$  
 
 - **DC (f = 0):**  
@@ -120,26 +119,27 @@ $$X_L = 2\pi f L$$
 - **High-frequency AC (f → ∞):**  
   $X_L \to \infty$ → Infinite opposition. Inductor acts as an **open circuit**. Rapid current changes induce a counter-EMF (via Faraday's law and Lenz's law), severely limiting current flow.
 
-**Physics:** Inductors resist *changes* in current. DC is unchanging (no resistance), while high-frequency AC changes rapidly (maximum resistance).
+**Physics:** Inductors resist *changes* in current. DC is unchanging (no resistance), while high-frequency AC changes rapidly (maximum resistance)*
 
 >STEP 4 : MEMORY CHECK AFTER SUMMARIZE THE DATA
-[YOU]: Based on our earlier chat, what is my name and core branch?
+*[YOU]: Based on our earlier chat, what is my name and core branch?*
 
-[COMPACTION] Token limit crossed! Summarizing older conversation...
- Compaction done!
+*[COMPACTION] Token limit crossed! Summarizing older conversation...*
+ *Compaction done!*
 
-[MODEL]: Your name is Disha and you’re an Electrical Engineering student (core branch: Electrical Engineering) at IIT Delhi.
+*[MODEL]: Your name is Disha and you’re an Electrical Engineering student (core branch: Electrical Engineering) at IIT Delhi.*
 
 >STEP 5: to check  /reset  command
-[YOU]: /reset
-🧹 Context cleared! Memory reset done
+*[YOU]: /reset*
+*Context cleared! Memory reset done*
 
 >STEP 6: AFTER MEMORY RESTET
-[YOU]: What is my name?
-[MODEL]: I don't know your name.
+*[YOU]: What is my name?*
+*[MODEL]: I don't know your name.*
 
 >STEP 7: TO CLOSE THE CONVERSATION
-[YOU]: exit
-Goodbye!
+*[YOU]: *exit*
+/Goodbye!*
 
->Note on Verification Parameters: > For simulation and quick turnaround testing of the [COMPACTION] logic without waiting to reach high volumetric token traffic, the threshold constraint in build2.py was temporarily dropped to **100** tokens during the active evaluation run. This allowed deterministic verification of the rolling buffer compression before restoring the default constraint to **1000** tokens for the final repository deployment.
+>Note on Verification Parameters:
+ *For simulation and quick turnaround testing of the [COMPACTION] logic without waiting to reach high volumetric token traffic, the threshold constraint in build2.py was temporarily dropped to **100** tokens during the active evaluation run. This allowed deterministic verification of the rolling buffer compression before restoring the default constraint to **1000** tokens for the final repository deployment.*
