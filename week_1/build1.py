@@ -38,7 +38,7 @@ def call_model(prompt: str) -> str:
     
     # --- CUSTOM ANALYSIS  ---
     print("\n" + "="*50)
-    print(" OPENROUTER ANALYSIS 🚀")
+    print(" OPENROUTER ANALYSIS ")
     print(f" Actively Used Model : {response.model}")
     print(f"Total Budget Tokens   : {response.usage.total_tokens}")
     if hasattr(response.choices[0].message, 'reasoning') and (response.choices[0].message.reasoning):
