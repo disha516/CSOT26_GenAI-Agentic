@@ -1,8 +1,8 @@
 # Assignment Submission: Week 1 (LLM API Integration & Chatbot Memory)
 
-# 📑 Assignment Submission: Week 1 (LLM API Integration & Chatbot Memory)
+#  Assignment Submission: Week 1 (LLM API Integration & Chatbot Memory)
 
-## 🧠 1. What I Learnt This Week (My Key Takeaways)
+##  1. What I Learnt This Week (My Key Takeaways)
 Before starting this assignment, I assumed LLMs inherently maintain memory of a chat session. Building these scripts from scratch gave me a solid understanding of how things actually work under the hood:
 * **LLMs are Completely Stateless:** Every time we invoke the client completion endpoint, it is a blind query. The model does not remember past turns. To make it behave like a chatbot, we have to manually capture the history in a standard Python list (`messages`) and feed the entire alternating list of user and assistant dictionaries back to the API on every single turn.
 * **Inspecting the Full Response Object:** Instead of just grabbing the text, I learned to print and inspect the complete nested `ChatCompletion` structure. Tracking `response.usage` fields like `total_tokens`, `prompt_tokens`, and `completion_tokens` is vital to understanding how much load a single query creates.
@@ -10,7 +10,7 @@ Before starting this assignment, I assumed LLMs inherently maintain memory of a 
 
 ---
 
-## 🛠️ 2. Implementation Decisions: How & Why
+##  2. Implementation Decisions: How & Why
 
 ### A. Context Compaction via Conditional Summary Injections
 * **How:** In `build2.py`, I set up a simple conditional block `if last_usage['total_tokens'] > 1000:`. When the token counter crosses this threshold, the script sends the current `messages` list plus a manual string asking the model to compress the conversation into 2-3 sentences. It extracts `compaction_response.choices[0].message.content` and completely resets the `messages` list with that fresh summary string inside a new system role dictionary.
