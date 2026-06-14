@@ -33,7 +33,7 @@ client = OpenAI(
     api_key=os.environ["OPENROUTER_API_KEY"],
 )
 
-MODEL = "deepseek/deepseek-v4-flash:free"
+MODEL = "google/gemini-2.5-flash"
 
 # ---------------------------------------------------------------------------
 # Tool schemas (the contract between you and the model)
@@ -102,7 +102,7 @@ def get_weather(city: str, unit: str = "celsius") -> dict:
         {"city": city, "temperature": 28, "unit": unit, "condition": "partly cloudy"}
     """
     # TODO: implement (hardcode some reasonable values)
-    pass
+    return {"city": city, "temperature": 25, "unit": unit, "condition": "Partly Cloudy"}
 
 
 def calculate(expression: str) -> dict:
@@ -112,7 +112,11 @@ def calculate(expression: str) -> dict:
     Return {"result": value} or {"error": message}.
     """
     # TODO: implement
-    pass
+    try:
+       
+        return {"result": eval(expression)}
+    except Exception as e:
+        return {"error": str(e)}
 
 
 # ---------------------------------------------------------------------------
@@ -138,7 +142,13 @@ def dispatch(tool_call) -> str:
     Note: tool_call.function.arguments is a *string*, not a dict. Parse it first.
     """
     # TODO: implement
-    pass
+    name = tool_call.function.name
+    
+    arguments = json.loads(tool_call.function.arguments)
+    
+    tool_function = TOOL_REGISTRY[name]
+    result = tool_function(**arguments)
+    return json.dumps(result)
 
 
 # ---------------------------------------------------------------------------
@@ -178,13 +188,29 @@ def run_agent(user_message: str) -> str:
             model=MODEL,
             messages=messages,
             tools=TOOLS,
+            max_tokens=2000
         )
         message = response.choices[0].message
         finish_reason = response.choices[0].finish_reason
 
         # TODO: handle finish_reason == "tool_calls"
         # TODO: handle finish_reason == "stop"
-        pass
+        if message.tool_calls:
+            
+            messages.append(message)
+            
+            
+            for tool_call in message.tool_calls:
+                result = dispatch(tool_call)
+                
+                messages.append({
+                    "role": "tool",
+                    "tool_call_id": tool_call.id,
+                    "content": result
+                })
+        else:
+            
+            return message.content
 
     return f"[Agent stopped after {MAX_ITERATIONS} iterations without a final answer]"
 
