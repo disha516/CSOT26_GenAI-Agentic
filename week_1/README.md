@@ -252,6 +252,7 @@ Some points to think about:
 
 - Implement a simple ChatAgent class which uses the earlier `call_model` as a method. Keep this class model-agnostic, i.e. the user can use any model through it (remember we are using openrouter).
 - Keep a rolling buffer that keeps only the last *N* turns. On overflow, either drop the oldest pair or summarise it into a single, short context message. Measure how this affects the model's coherence.
+- Write a SUBMISSION.md file explaining how you built your chatbot, what decisions you took and why. Try to write this in your own words.
 
 **Submit:** Your `chatbot.py` (or equivalent) implementing the multi-turn conversation loop.
 
@@ -262,6 +263,8 @@ Some points to think about:
 - The ChatAgent is constructed as a Python class with multiple configuration options
 - The API key is loaded from the environment. A key found in source code is an auto-fail.
 - A `.env` file exists and is listed in `.gitignore`.
+- You do not use any external library other than openai / openrouter sdk.
+- You have a SUBMISSION.md along with the code.
 
 **Bonus:**
 - Implement compaction: Automatically summarise the chat history into a single message when you hit the limit for maximum turns. Also add a manual /compact command.
