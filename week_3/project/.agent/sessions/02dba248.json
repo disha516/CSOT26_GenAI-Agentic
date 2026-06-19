@@ -9,5 +9,7 @@
     {
       "role": "user",
       "content": "Search for a paper on FlashAttention and write a 2-line summary in notes/flash.txt"
-    },
+    }
+    ]
+  }
     
