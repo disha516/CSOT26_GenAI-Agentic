@@ -18,11 +18,11 @@ from agent import Agent
 from textual import work
 import threading
 
-
 class TUIAgent(Agent):
     """TUIAgent inherits from Agent but overrides _emit to write to the Textual log."""
-    def __init__(self, log_widget):
-        super().__init__()
+    # Is line mein humne workspace aur session_id add kiya autograder ke liye
+    def __init__(self, log_widget, workspace=".", session_id=None):
+        super().__init__(workspace=workspace, session_id=session_id)
         self.log_widget = log_widget
 
     def _emit(self, event: str, **data) -> None:
@@ -35,8 +35,10 @@ class TUIAgentApp(App):
         Binding("ctrl+q", "quit", "Quit"),
     ]
 
-    def __init__(self):
+    def __init__(self, workspace=".", session_id=None):
         super().__init__()
+        self.workspace = workspace
+        self.session_id = session_id
         self.agent = None
 
     def compose(self) -> ComposeResult:
@@ -47,7 +49,8 @@ class TUIAgentApp(App):
 
     def on_mount(self):
         log = self.query_one("#log", RichLog)
-        self.agent = TUIAgent(log_widget=log)
+        # Yahan hum agent ko naye paths bhej rahe hain
+        self.agent = TUIAgent(log_widget=log, workspace=self.workspace, session_id=self.session_id)
         log.write(f"[bold green]Research Desk Started! (Session: {self.agent.session_id})[/bold green]\nType '/quit' or press Ctrl+Q to exit.")
 
     def on_input_submitted(self, event):
