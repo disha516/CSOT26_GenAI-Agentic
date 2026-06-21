@@ -23,15 +23,23 @@ def paper_search(query: str) -> dict:
 
 def read_paper(paper_id: str) -> dict:
     """Reads paper metadata and abstract using the paper ID."""
+    
+    # FIX: Strip URL prefixes and version suffixes automatically
+    paper_id = paper_id.replace("https://arxiv.org/abs/", "").replace("http://arxiv.org/abs/", "")
+    paper_id = paper_id.split('v')[0].strip()
+    
     url = f"https://huggingface.co/api/papers/{paper_id}"
     try:
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
+            abstract = data.get("summary", "No abstract available.")
+            
+            # FIX: Truncate to 5000 chars to avoid context overflow
             return {
                 "title": data.get("title"),
                 "authors": [a.get("name") for a in data.get("authors", [])],
-                "abstract": data.get("summary", "No abstract available.")
+                "abstract": abstract[:5000] 
             }
         return {"error": "Paper not found or API error."}
     except Exception as e:

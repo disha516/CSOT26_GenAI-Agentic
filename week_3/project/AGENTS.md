@@ -14,7 +14,7 @@
 ## Research notes
 - Save new content with `write_file` to `notes/`
 - Update existing notes with `read_file` then `edit_file` — do not rewrite whole files unnecessarily
-- Use `edit_file` operations: `append` for new sections, `replace` to revise, `delete` to remove stale parts
+- Use `edit_file` operations: `insert` for new sections, `replace` to revise, `delete` to remove stale parts
 - Keep edits inside `notes/` unless the user explicitly asks otherwise
 - Use lowercase hyphenated filenames: `notes/topic-name.md`
 

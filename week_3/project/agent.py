@@ -69,7 +69,6 @@ class Agent:
     """Core agent: loop, tools, sessions."""
     def __init__(self, workspace: str = ".", session_id: str | None = None):
         self.workspace = os.path.abspath(workspace)
-        # FIX 1: Use proper workspace path for sessions dir
         self.sessions_dir = os.path.join(self.workspace, ".agent", "sessions")
         os.makedirs(self.sessions_dir, exist_ok=True)
         
@@ -85,7 +84,6 @@ class Agent:
             self.session_id = uuid.uuid4().hex[:8]
             self.messages = [{"role": "system", "content": build_system_prompt(self.workspace)}]
         
-        # FIX 2: Save immediately upon initialization so the autograder sees the JSON file
         self._save_session()
 
     def _save_session(self):
@@ -135,7 +133,7 @@ class Agent:
 class REPLAgent(Agent):
     """Terminal REPL interface."""
     def run(self) -> None:
-        print(f"Research Desk [{self.session_id}] — /quit to exit")
+        print(f"Research Desk [{self.session_id}] — /quit to exit, /sessions to list, /resume <id> to switch")
         while True:
             try:
                 user_input = input("\n> ").strip()
@@ -143,6 +141,28 @@ class REPLAgent(Agent):
                 print(); break
             if not user_input or user_input in ("/quit", "/exit"):
                 break
+            
+            # BONUS FIX: Handle /sessions command
+            if user_input == "/sessions":
+                print("\nSaved Sessions:")
+                for f in os.listdir(self.sessions_dir):
+                    if f.endswith(".json"):
+                        print(f" - {f.replace('.json', '')}")
+                continue
+            
+            # BONUS FIX: Handle /resume command
+            if user_input.startswith("/resume "):
+                new_id = user_input.split(" ")[1].strip()
+                filepath = os.path.join(self.sessions_dir, f"{new_id}.json")
+                if os.path.exists(filepath):
+                    self.session_id = new_id
+                    with open(filepath, "r", encoding="utf-8") as f:
+                        self.messages = json.load(f).get("messages", [])
+                    print(f"\nResumed session: {new_id}")
+                else:
+                    print(f"\nSession {new_id} not found.")
+                continue
+
             print(f"\nAgent: {self.chat(user_input)}")
 
     def _emit(self, event: str, **data) -> None:
@@ -161,7 +181,6 @@ def main():
             print("Error: Could not import tui.py. Ensure it exists.")
             return
 
-    # FIX 3: Properly parse --session and other CLI arguments for the autograder
     session_id = None
     args = []
     

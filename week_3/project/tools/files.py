@@ -8,8 +8,6 @@ Implement:
   - edit_file(path, operation, start_line, end_line?, content?)  — replace | delete | append
   - list_files(path, pattern)
 """
-
-# TODO: implement — see Build 2
 import os
 import glob as glob_module
 
@@ -57,7 +55,17 @@ def edit_file(path: str, operation: str, start_line: int, end_line: int | None =
             
         with open(target, "w", encoding="utf-8") as f:
             f.writelines(lines)
-        return {"success": True, "operation": operation}
+            
+        # FIX: Read the updated file to provide a diff/preview to the AI
+        with open(target, "r", encoding="utf-8") as f:
+            updated_content = f.read()
+            preview = updated_content[:1000]
+            
+        return {
+            "success": True, 
+            "operation": operation,
+            "new_content_preview": preview
+        }
     except Exception as e:
         return {"error": str(e)}
 
