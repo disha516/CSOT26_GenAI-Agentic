@@ -1,0 +1,37 @@
+{
+  "id": "211985cb",
+  "updated_at": "2026-06-19T17:51:12.917963+00:00",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are Research Desk, a helpful research assistant. You can search the web, read academic papers, and manage files.\n\n# Research Desk Rules\n\n## Citations\n- Include source URLs inline: [title](url)\n- For papers: cite as [title](https://arxiv.org/abs/{arxiv_id})\n- Prefer primary sources (papers, official docs) over blog posts\n\n## Papers (required tools)\n- Use `paper_search` for ML research and literature questions\n- Use `read_paper` with the arxiv_id from search results \u2014 do not guess IDs\n- If `read_paper` returns 404, fall back to `web_fetch` on arxiv.org/abs/...\n- Do not use web_search when paper_search is the right tool\n\n## Research notes\n- Save new content with `write_file` to `notes/`\n- Update existing notes with `read_file` then `edit_file` \u2014 do not rewrite whole files unnecessarily\n- Use `edit_file` operations: `append` for new sections, `replace` to revise, `delete` to remove stale parts\n- Keep edits inside `notes/` unless the user explicitly asks otherwise\n- Use lowercase hyphenated filenames: `notes/topic-name.md`\n\n## Web search\n- Use `web_search` before `web_fetch` for non-paper questions\n- Do not fetch more than 3 pages per question unless the user asks for depth\n\n## Tone\n- Be concise in chat; put detail in the note files\n"
+    },
+    {
+      "role": "user",
+      "content": "what is machine learning"
+    },
+    {
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "id": "tool_web_search_ImI0MOg8Mf8ouNH929vt",
+          "function": {
+            "arguments": "{\"query\":\"what is machine learning\"}",
+            "name": "web_search"
+          },
+          "type": "function",
+          "index": 0
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "tool_web_search_ImI0MOg8Mf8ouNH929vt",
+      "content": "{\"results\": [{\"title\": \"What is Machine Learning? | IBM\", \"link\": \"https://www.ibm.com/think/topics/machine-learning\", \"snippet\": \"Machine learning is the subset of artificial intelligence (AI) focused on algorithms that can \\u201clearn\\u201d the patterns of training data and, subsequently, make ...\", \"sitelinks\": [{\"title\": \"What is machine learning?\", \"link\": \"https://www.ibm.com/think/topics/machine-learning#What+is+machine+learning%3F\"}, {\"title\": \"How machine learning works\", \"link\": \"https://www.ibm.com/think/topics/machine-learning#How+machine+learning+works\"}], \"position\": 1}, {\"title\": \"What Is Machine Learning (ML)? Definition and Examples\", \"link\": \"https://ischoolonline.berkeley.edu/blog/what-is-machine-learning/\", \"snippet\": \"Machine learning is a subset of AI concerned with training models to allow computers to mimic human thought and decision making without explicit ...\", \"date\": \"Mar 17, 2026\", \"sitelinks\": [{\"title\": \"How does machine learning...\", \"link\": \"https://ischoolonline.berkeley.edu/blog/what-is-machine-learning/#how\"}, {\"title\": \"What are the main types of...\", \"link\": \"https://ischoolonline.berkeley.edu/blog/what-is-machine-learning/#types\"}], \"position\": 2}, {\"title\": \"What is Machine Learning? - Google for Developers\", \"link\": \"https://developers.google.com/machine-learning/intro-to-ml/what-is-ml\", \"snippet\": \"ML is the process of training a piece of software, called a model, to make useful predictions or generate content (like text, images, audio, or video) from ...\", \"date\": \"Jan 27, 2026\", \"position\": 3}]}"
+    },
+    {
+      "content": "Machine learning is a subfield of artificial intelligence (AI) that focuses on enabling computer systems to \"learn\" from data without being explicitly programmed. This learning involves identifying patterns in training data and then using those patterns to make predictions or generate content such as text, images, audio, or video. It effectively allows computers to mimic human thought and decision-making processes.\n\nFor more details, you can refer to these sources:\n*   [What is Machine Learning? | IBM](https://www.ibm.com/think/topics/machine-learning)\n*   [What Is Machine Learning (ML)? Definition and Examples](https://ischoolonline.berkeley.edu/blog/what-is-machine-learning/)\n*   [What is Machine Learning? - Google for Developers](https://developers.google.com/machine-learning/intro-to-ml/what-is-ml)",
+      "role": "assistant"
+    }
+  ]
+}

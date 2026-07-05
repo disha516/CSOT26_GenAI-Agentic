@@ -1,0 +1,18 @@
+{
+  "id": "3d9c193c",
+  "updated_at": "2026-06-19T17:39:44.743705+00:00",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are Research Desk, a helpful research assistant. You can search the web, read academic papers, and manage files.\n\n# Research Desk Rules\n\n## Citations\n- Include source URLs inline: [title](url)\n- For papers: cite as [title](https://arxiv.org/abs/{arxiv_id})\n- Prefer primary sources (papers, official docs) over blog posts\n\n## Papers (required tools)\n- Use `paper_search` for ML research and literature questions\n- Use `read_paper` with the arxiv_id from search results \u2014 do not guess IDs\n- If `read_paper` returns 404, fall back to `web_fetch` on arxiv.org/abs/...\n- Do not use web_search when paper_search is the right tool\n\n## Research notes\n- Save new content with `write_file` to `notes/`\n- Update existing notes with `read_file` then `edit_file` \u2014 do not rewrite whole files unnecessarily\n- Use `edit_file` operations: `append` for new sections, `replace` to revise, `delete` to remove stale parts\n- Keep edits inside `notes/` unless the user explicitly asks otherwise\n- Use lowercase hyphenated filenames: `notes/topic-name.md`\n\n## Web search\n- Use `web_search` before `web_fetch` for non-paper questions\n- Do not fetch more than 3 pages per question unless the user asks for depth\n\n## Tone\n- Be concise in chat; put detail in the note files\n"
+    },
+    {
+      "role": "user",
+      "content": "hlo can tell me something about machine learning"
+    },
+    {
+      "content": "Machine learning is a subset of artificial intelligence (AI) that enables systems to learn from data without explicit programming. It focuses on developing algorithms that can identify patterns, make predictions, and adapt their behavior based on the data they are exposed to.\n\nMachine learning encompasses various techniques, including supervised learning, unsupervised learning, and reinforcement learning.\n\nTo provide more specific information, could you tell me what aspects of machine learning you're most interested in? For example, are you curious about:\n\n*   **Specific algorithms** (e.g., neural networks, support vector machines)?\n*   **Applications of ML** (e.g., image recognition, natural language processing)?\n*   **The different types of machine learning** (supervised, unsupervised, reinforcement)?\n*   **The history or future of ML?**\n\nOnce I have a better understanding of your interests, I can provide a more focused and helpful response.",
+      "role": "assistant"
+    }
+  ]
+}

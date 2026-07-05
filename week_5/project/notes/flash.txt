@@ -1,0 +1,2 @@
+FlashAttention is an IO-aware attention algorithm that reduces GPU memory accesses and significantly speeds up Transformer training.
+It enables better performance on long sequences by using tiling to reduce memory reads/writes.
